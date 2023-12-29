@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<!-- <form action="/greet" method="post"> 
+    <input type="text" name="name" autocomplete="off" autofocus placeholder="Name">
+    <button type="submit">Greet</button>
+</form> -->
+
+<!-- !To USE One Route  -->
+<form action="/" method="post"> <!--  use post for security-->
+    <input type="text" name="name" autocomplete="off" autofocus placeholder="Name">
+    <button type="submit">Greet</button>
+</form>
+
+{% endblock %}

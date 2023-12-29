@@ -1,0 +1,16 @@
+list = "SELECT * FROM states WHERE name = '{}' AND name LIKE 'N%' COLLATE utf8mb4_bin".format(new_state_safe)
+
+username = 'root'
+password = 'root'
+port = 3306
+database = 'hbtn_0e_6_usa'
+
+path = 'mysql+mysqldb://{}:{}@localhost:3306/{}'.format(username, password, database)
+
+dabase = create_engine(path)
+       
+
+Base.metadata.create_all(dabase)
+
+Session = sessionmaker(bind=dabase)
+session = Session()

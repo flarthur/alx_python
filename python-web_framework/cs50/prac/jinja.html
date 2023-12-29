@@ -1,0 +1,116 @@
+<!-- !SYNOPSIS -->
+
+// A template contains variables/expressions which get replaced when the template renders.
+// and tags which control the logic of the template
+
+// Below is a template which illustrates a few basics using the default Jinja config:
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>My Webpage</title>
+    </head>
+    <body>
+        <ul id="navigation">
+        {% for item in navigation %}
+            <li><a href="{{ item.href }}">{{ item.caption }}</a></li>
+        {% endfor %}
+        </ul>
+
+        <h1>My Webpage</h1>
+        {{ a_variable }}
+
+        {# a comment}
+
+    </body>
+</html>
+
+<!-- An app developer can change the default config 
+    from {% foo %} to <% foo %> -->
+<!-- There are a few kinds of delimiters. The default Jinja ones
+    are configured as follows-->
+
+{% ... %} --> for statements
+{{ ... }} --> for expressions to print to the template output
+{# ... #} --> for comments not included in the template output
+
+<!--Line Statements and Comments are also possible, though they dont 
+    have default prefix characters. To use them, set line_statement_prefix 
+    and line_comment_prefix when creating the Environment.-->
+
+<!-- !VARIABLES -->
+
+//Template variables are defined by the context dictionary passed to the 
+//template
+<!-- You can use dot (.) to access attributes of a variable in addition 
+    to the standard Pyhton *__getitem__* subscript syntax ([]).-->
+
+//The following do the same thing:
+{{ foo.bar }}
+{{ foo['bar'] }}
+<!--* The outer double curlies are not part of the variable, but the
+print statement. If accessing variables inside tags don't put the braces 
+around them-->
+
+<!--! COMMENTS -->
+//Use the comment syntax which is default set to {# ... #} to comment-out 
+//part of a line in a template. Example
+
+{# note: commented-out template because we no longer use this 
+    {% for user in users %}
+        ...
+    {% endfor %}
+#}
+
+<!-- ! WHITESPACE CONTROL -->
+// With both (trim_blocks) and (lstrip_blocks) enabled, ypu can put the
+//block tags in their own lines, and the whole block line will be removed when
+//rendered, preserving the whitespace of the contents.
+
+//Without those options enabled, This template:
+<div>
+    {% if True %}
+        yay
+    {% endif %}
+</div>
+//gets rendered with blank lines inside the div:
+
+<div>
+
+    yay
+
+</div>
+
+//But with both options enabled, the temp block lines are removed and the other
+//whitespaces are preserved
+
+<div>
+    yay
+</div>
+
+//You can manually disable the lstrip_blocks behaviour by adding a (+) sign 
+//at the start of the block:
+<div>
+    {%+ if something %}yay{% endif %}
+</div>
+
+//and the trim_blocks by putting it at the end of a block:
+<div>
+    {% if something +%}
+        yay
+    {% endif %}
+</div>
+
+//You can also strip whitespace in templates by hand. If you add a minus sign (-)
+//to the start or end of a block (e.g. a For tag), a comment, or a variable expression,
+the whitespaces before or after that block will be removed:
+
+{% for item in seq -%}
+    {{item}}
+{%- endfor %}
+
+//this will yield all elements without whitespaces hence if printing 1 to 9 = 123456789
+
+<!--* By default, Jinja also removes trailing newlines. To keep single trailing newlines, 
+    configure Jinja to keep_trailing_newline.-->
+    
