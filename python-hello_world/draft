@@ -1,0 +1,67 @@
+#! Break Statement and else clauses on loops
+
+#for n in range(2, 10):
+#  for x in range(2, n):
+#    if n % x == 0:
+#      print(n, 'equals', x, '*', n//x)
+#      break
+#  else:
+#    print(n, " is a prime number")
+
+
+
+#! Continue statements
+#for num in range(2, 10):
+#  if num % 2 == 0:
+#    print("found an even number", num)
+#    continue
+#  print("Found an odd number", num)
+
+#! Pass statement
+#while True:
+#  pass #Busy-wait for keyboard interrupt Ctrl+C
+
+#*This is used for creating minimal classes
+#class MyEmptyClass:
+#  pass
+
+
+#* Another great use-case is as a placeholder 
+# for a function or conditional body when you're 
+# working on new code, allowing you to keep thinking
+# at a more abstract level
+
+#def initlog(*args):
+#  pass #remember to implement this*
+
+#! Defining functions
+#* Write a function that prints the Fibonacci series upto n
+
+#def fib(n):
+#  """Print a Fibonacci series upto n."""
+#  a, b = 0, 1
+#  while a < n:
+#    print(a, end=" ")
+#    a, b = b, a+b
+#  print()
+#  
+#now call the function
+#fib(100)
+#
+#fala = fib
+#fala(200)
+
+#*Writing a function that returns a list of 
+# numbers instead of printing them.abs
+
+# def fib2(n):
+#   """Return a list containing the Fibonacci series upto n"""
+#   result = []
+#   a, b = 0, 1
+#   while a < n:
+#     result.append(a)
+#     a, b = b, a+b
+#   return result
+
+# f300 = fib2(300)         #call it
+# print(f300)                     #write the result
