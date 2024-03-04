@@ -1,39 +1,34 @@
-import sys
-import requests
+"""import json, requests, sys"""
 import csv
+import requests
+import sys
+"""import json, requests, sys"""
 
-def get_employee_info(employee_id):
-    # Get employee details
-    employee_url = f"https://jsonplaceholder.typicode.com/users/{employee_id}"
-    response = requests.get(employee_url)
-    employee_data = response.json()
-    user_id = employee_data.get('id')
-    username = employee_data.get('username')
+def getData(id):
+    """
+    Get data from json api and export to json file
+    """
+    usersurl = "https://jsonplaceholder.typicode.com/users/{}".format(id)
+    todourl = "{}/todos".format(usersurl)
 
-    # Get employee's TODO list
-    todo_url = f"https://jsonplaceholder.typicode.com/users/{employee_id}/todos"
-    response = requests.get(todo_url)
-    todo_list = response.json()
+    request1 = requests.get(usersurl)
+    result = request1.json()
+    userid = result['id']
+    username = result['username']
 
-    # Write data to CSV file
-    filename = f"{user_id}.csv"
-    with open(filename, mode='w', newline='') as file:
-        writer = csv.writer(file)
-        writer.writerow(["USER_ID", "USERNAME", "TASK_COMPLETED_STATUS", "TASK_TITLE"])
-        for task in todo_list:
-            task_completed_status = "True" if task.get('completed') else "False"
-            task_title = task.get('title')
-            writer.writerow([user_id, username, task_completed_status, task_title])
+    request2 = requests.get(todourl)
+    tasks = request2.json()
+
+
+    with open("{}.csv".format(userid), "w", newline='') as csvfile:
+        writer = csv.writer(csvfile, quoting = csv.QUOTE_ALL)
+        for task in tasks:
+            writer.writerow([userid, username, task['completed'], task['title']])
+
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("Usage: python script.py <employee_id>")
-        sys.exit(1)
-    employee_id = sys.argv[1]
-    try:
-        employee_id = int(employee_id)
-    except ValueError:
-        print("Employee ID must be an integer")
-        sys.exit(1)
-
-    get_employee_info(employee_id)
+    if len(sys.argv) > 1:
+        id = sys.argv[1]
+    else:
+        id = 1
+    getData(str(id))

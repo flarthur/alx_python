@@ -1,38 +1,41 @@
-import sys
-import requests
+"""import json, requests, sys"""
 import json
+import requests
+import sys
+"""import json, requests, sys"""
 
-def get_employee_info(employee_id):
-    # Get employee details
-    employee_url = f"https://jsonplaceholder.typicode.com/users/{employee_id}"
-    response = requests.get(employee_url)
-    employee_data = response.json()
-    user_id = employee_data.get('id')
-    username = employee_data.get('username')
 
-    # Get employee's TODO list
-    todo_url = f"https://jsonplaceholder.typicode.com/users/{employee_id}/todos"
-    response = requests.get(todo_url)
-    todo_list = response.json()
+def getData(id):
+    """
+    Get data from json api and export to json file
+    """
+    usersurl = "https://jsonplaceholder.typicode.com/users/{}".format(id)
+    todourl = "{}/todos".format(usersurl)
 
-    # Prepare JSON data
-    json_data = {str(user_id): [{"task": task.get('title'), "completed": task.get('completed'), "username": username} for task in todo_list]}
+    request1 = requests.get(usersurl)
+    results = request1.json()
+    userid = results['id']
+    username = results['username']
 
-    # Write data to JSON file
-    filename = f"{user_id}.json"
-    with open(filename, mode='w') as file:
-        json.dump(json_data, file, indent=4)
+    request2 = requests.get(todourl)
+    tasks = request2.json()
+
+    alldata = {}
+
+    jsondata = [
+            {"task": task['title'], "completed": task['completed'], "username": username}
+            for task in tasks
+        ]
+    
+    alldata[str(userid)] = jsondata
+
+    with open("{}.json".format(userid), "w") as jsonfile:
+        json.dump(alldata, jsonfile)
+
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("Usage: python script.py <employee_id>")
-        sys.exit(1)
-    employee_id = sys.argv[1]
-    try:
-        employee_id = int(employee_id)
-    except ValueError:
-        print("Employee ID must be an integer")
-        sys.exit(1)
-
-    get_employee_info(employee_id)
- 
+    if len(sys.argv) > 1:
+        id = sys.argv[1]
+    else:
+        id = 1
+    getData(int(id))

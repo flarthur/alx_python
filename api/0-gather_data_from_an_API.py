@@ -1,37 +1,32 @@
-import sys
 import requests
+import sys
 
-def get_employee_info(employee_id):
-    # Get employee details
-    employee_url = f"https://jsonplaceholder.typicode.com/users/{employee_id}"
-    response = requests.get(employee_url)
-    employee_data = response.json()
-    employee_name = employee_data.get('name')
 
-    # Get employee's TODO list
-    todo_url = f"https://jsonplaceholder.typicode.com/users/{employee_id}/todos"
-    response = requests.get(todo_url)
-    todo_list = response.json()
+def getData(id):
+    usersurl = "https://jsonplaceholder.typicode.com/users/{}".format(id)
+    request1 = requests.get(usersurl)
+    result = request1.json()
+    name = result['name']
+    todourl = "{}/todos".format(usersurl)
+    request2 = requests.get(todourl)
+    results = request2.json()
 
-    # Calculate completed tasks
-    completed_tasks = [task for task in todo_list if task.get('completed')]
-    num_completed_tasks = len(completed_tasks)
-    total_num_tasks = len(todo_list)
+    tasksTitles = []
+    count = 0
+    for result in results:
+        if result['completed']:
+            count += 1
+            tasksTitles.append(result['title'])
+    
+        
+    print("Employee {} is done with tasks({}/{}):".format(name, count, len(results)))
+    for task in tasksTitles:
+        print("\t {}".format(task))
 
-    # Print employee's progress
-    print(f"Employee {employee_name} is done with tasks({num_completed_tasks}/{total_num_tasks}):")
-    for task in completed_tasks:
-        print(f"     {task.get('title')}")
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("Usage: python script.py <employee_id>")
-        sys.exit(1)
-    employee_id = sys.argv[1]
-    try:
-        employee_id = int(employee_id)
-    except ValueError:
-        print("Employee ID must be an integer")
-        sys.exit(1)
-
-    get_employee_info(employee_id)
+    if len(sys.argv) > 1:
+        id = sys.argv[1]
+    else:
+        id = 1
+    getData(id)
